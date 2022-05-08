@@ -4,6 +4,6 @@ int main()
 {
 	ShowWindow(GetConsoleWindow(), SW_HIDE);
 	WI::InicializedWcex();
-	WI::create_window(L"Class", L"name", 700, 370);
+	WI::create_window(L"Class", L"WSZU", 700, 370);
 	return 0;
 }

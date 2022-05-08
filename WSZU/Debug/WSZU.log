@@ -1,12 +1,2 @@
-﻿  FindFiles.cpp
-  SearchAllFileOnSignature.cpp
-C:\Users\velik\source\repos\Курсовая\WSZU\WSZU\SearchAllFileOnSignature.cpp(79,21): warning C4018: <: несоответствие типов со знаком и без знака
-C:\Users\velik\source\repos\Курсовая\WSZU\WSZU\SearchAllFileOnSignature.cpp(83,22): warning C4018: <: несоответствие типов со знаком и без знака
-  Source.cpp
-  Window.cpp
-C:\Users\velik\source\repos\Курсовая\WSZU\WSZU\WndProc.h(158,9): warning C4244: аргумент: преобразование "double" в "int", возможна потеря данных
-C:\Users\velik\source\repos\Курсовая\WSZU\WSZU\WndProc.h(108,24): warning C4101: nSize: неиспользованная локальная переменная
-C:\Users\velik\source\repos\Курсовая\WSZU\WSZU\Window.cpp(16,36): warning C4302: приведение типов: усечение из "LPWSTR" к "WORD"
-  Создание кода...
-C:\Users\velik\source\repos\Курсовая\WSZU\WSZU\WndProc.h(69): warning C4715: GetFolder: значение возвращается не при всех путях выполнения
-  WSZU.vcxproj -> C:\Users\velik\source\repos\Курсовая\WSZU\Debug\WSZU.exe
+﻿  Source.cpp
+  WSZU.vcxproj -> C:\Users\velik\Documents\GitHub\vladislav032\Debug\WSZU.exe

@@ -53,18 +53,6 @@ DWORD SearchAllFileOnSignature::File_Size(LPWSTR full_fale_name)
 	return dwSize;
 }
 
-bool dirExists(const std::wstring& dirName_in)
-{
-	DWORD ftyp = GetFileAttributesW(dirName_in.c_str());
-	if (ftyp == INVALID_FILE_ATTRIBUTES)
-		return false;  //something is wrong with your path!
-
-	if (ftyp & FILE_ATTRIBUTE_DIRECTORY)
-		return true;   // this is a directory!
-
-	return true;    // this is not a directory!
-}
-
 BOOL SearchAllFileOnSignature::Search_Signature(LPWSTR full_fale_name, BYTE* VIRUS_SIGNATURE)
 {
 	DWORD SIZE_FILE = File_Size(full_fale_name);

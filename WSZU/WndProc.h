@@ -2,10 +2,11 @@
 
 #include "deff.h"
 
-void threadFunction(wchar_t* str, double& procent, SearchAllFileOnSignature& safos, wchar_t* InfectedFile)
+void threadFunction(wchar_t* str, double& iFile, SearchAllFileOnSignature& safos, wchar_t* InfectedFile)
 {
-	safos.StartScanOnSignature(VIRUS_SIGNATURE, str, procent, InfectedFile);
+	safos.StartScanOnSignature(VIRUS_SIGNATURE, str, iFile, InfectedFile);
 }
+
 static int CALLBACK	BrowseCallbackProc(HWND hWnd, UINT uMsg, LPARAM lParam, LPARAM lpData)
 {
 	switch (uMsg) {
@@ -76,12 +77,19 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 	case WM_COMMAND:
 		if (LOWORD(wParam) == ID_hButtonScanStart && !flag)
 		{
-			SendMessage(hInfectedFilesListBox, LB_RESETCONTENT, 0, 0);
-			Pahts.clear();
-			flag = true;
-			thr = std::thread(threadFunction, std::ref(STR), std::ref(indexFile), std::ref(safos), std::ref(InfectedFile));
+			if (strlen((char*)VIRUS_SIGNATURE) == 0)
+			{
+				MessageBox(hwnd, L"Текстовые данные в файле Signature.txt отсувуют!\nПожалуйста запишите в данный файл сигнатуру для осуществление сканирования.", L"Ошибка", MB_OK | MB_ICONERROR);
+			}
+			else 
+			{
+				SendMessage(hInfectedFilesListBox, LB_RESETCONTENT, 0, 0);
+				Pahts.clear();
+				flag = true;
+				thr = std::thread(threadFunction, std::ref(STR), std::ref(indexFile), std::ref(safos), std::ref(InfectedFile));
+			}
 		}
-		if (LOWORD(wParam) == ID_hButtonStopSearch && flag)
+		if ((LOWORD(wParam) == ID_hButtonStopSearch && flag))
 		{
 			flag = false;
 			TerminateThread(thr.native_handle(), NULL);
@@ -127,10 +135,13 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 		hListBoxWriteDriver = CreateWindow(L"listBox", NULL, WS_CHILD | WS_VISIBLE | LBS_STANDARD | LBS_WANTKEYBOARDINPUT, 40, 40, 500, 80, hwnd, (HMENU)ID_hListBoxWriteDriver, hInst, 0);
 		hInfectedFilesListBox = CreateWindow(L"listBox", NULL, WS_CHILD | WS_VISIBLE | LBS_STANDARD | LBS_WANTKEYBOARDINPUT | WS_TABSTOP | WS_HSCROLL | LBS_NOINTEGRALHEIGHT, 40, 130, 500, 90, hwnd, (HMENU)ID_hInfectedFilesListBox, hInst, 0);
 
+		indexDrive = GetLogicalDriveStringsW(sizeof(buf), buf);
+		prevIndexDrive = indexDrive;
 		SendMessage(hListBoxWriteDriver, WM_SETREDRAW, FALSE, 0L);
-		SendMessage(hListBoxWriteDriver, LB_ADDSTRING, 0, (LPARAM)L"C:\\");
-		SendMessage(hListBoxWriteDriver, LB_ADDSTRING, 0, (LPARAM)L"D:\\");
-		SendMessage(hListBoxWriteDriver, LB_ADDSTRING, 0, (LPARAM)L"F:\\");
+		for (wchar_t* s = buf; *s; s += wcslen(s) + 1)
+		{
+			SendMessage(hListBoxWriteDriver, LB_ADDSTRING, 0, (LPARAM)s);
+		}
 		SendMessage(hListBoxWriteDriver, LB_GETTEXT, 0, (LPARAM)Buffer);
 		SendMessage(hListBoxWriteDriver, WM_SETREDRAW, TRUE, 0L);
 		SendMessage(GetDlgItem(hwnd, ID_hInfectedFilesListBox), LB_SETHORIZONTALEXTENT, 1000, 0);
@@ -161,7 +172,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 			SetWindowText(hSearchFiles, Buff);
 			SetWindowText(hPath, STR);
 		}
-		//GetWindowTextA(hSignatureEdit, (char*)VIRUS_SIGNATURE, 128);
 		SetWindowText(hPathSearch, Buffer);
 		if (wcsnlen_s(InfectedFile, _SIZE_) != NULL)
 		{
@@ -170,6 +180,22 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 			wcscat_s(BUF, _SIZE_, InfectedFile);
 			Pahts.push_back(BUF);
 			InfectedFile[0] = L'\0';
+		}
+		memset(buf, L'\0', 26);
+		indexDrive = GetLogicalDriveStringsW(sizeof(buf), buf);
+		if (indexDrive != prevIndexDrive)
+		{
+			prevIndexDrive = indexDrive;
+			MessageBox(hwnd, L"Произошло изменение, диск или устройство было добавлено или изьято!", L"Предупреждение", MB_OK);
+			SendMessage(hListBoxWriteDriver, LB_RESETCONTENT, 0, 0);
+			SendMessage(hListBoxWriteDriver, WM_SETREDRAW, FALSE, 0L);
+			for (wchar_t* s = buf; *s; s += wcslen(s) + 1)
+			{
+				SendMessage(hListBoxWriteDriver, LB_ADDSTRING, 0, (LPARAM)s);
+				wcscpy_s(Buffer, _SIZE_, s);
+			}
+			SendMessage(hListBoxWriteDriver, WM_SETREDRAW, TRUE, 0L);
+			Change_Drives = true;
 		}
 		break;
 	case WM_SETFOCUS:

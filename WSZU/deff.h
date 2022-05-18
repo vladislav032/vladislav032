@@ -14,7 +14,7 @@
 #define DEST_PATH L"log.txt"
 
 BYTE* VIRUS_SIGNATURE = new BYTE[_SIZE_SIGNATURE_VIRUS]{};
-wchar_t* Buffer = (LPWSTR)calloc(_SIZE_ + 1, sizeof(LPWSTR));
+LPWSTR Buffer = (LPWSTR)malloc((_SIZE_ + 1) * sizeof(LPWSTR));
 wchar_t STR[_SIZE_] = L"\0";
 wchar_t InfectedFile[_SIZE_] = L"\0";
 double indexFile = 0;
@@ -25,6 +25,9 @@ wchar_t Buff[128]{};
 std::thread thr;
 HDC hdc;
 PAINTSTRUCT ps;
+DWORD indexDrive, prevIndexDrive;
+wchar_t buf[26]{};
+bool Change_Drives = false;
 HBRUSH hBrush = nullptr;
 HWND hPath = nullptr;
 HWND hSearchFiles = nullptr;

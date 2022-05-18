@@ -10,8 +10,8 @@ VOID SearchAllFileOnSignature::Scaning_Directories(HANDLE hFile, LPWSTR Path, BY
 	LARGE_INTEGER li{};
 
 	li.QuadPart = 0;
-	olf.Offset = li.LowPart;
-	olf.OffsetHigh = li.HighPart;
+	olf.Offset = 0xFFFFFFFF;
+	olf.OffsetHigh = 0xFFFFFFFF;
 
 	while (f.Next())
 	{
@@ -22,13 +22,14 @@ VOID SearchAllFileOnSignature::Scaning_Directories(HANDLE hFile, LPWSTR Path, BY
 		{
 			if (Search_Signature(strTmp, Signature))
 			{
-				wcscat(strTmp, L"\r\n");
+				wcscat_s(strTmp, _SIZE_, L"\r\n");
 				WriteFile(this->hFile, strTmp, wcslen(strTmp) * sizeof(WCHAR), &iNW, &olf);
-				ReadFile(this->hFile, infectedFile, wcslen(strTmp) * sizeof(WCHAR), &iNR, &olf);
+				memset(infectedFile, L'\0', _SIZE_);
+				wcscpy_s(infectedFile, _SIZE_, strTmp);
 			}
 			indexFile++;
 		}
-		wcscpy(str, strTmp);
+		wcscpy_s(str, _SIZE_, strTmp);
 		memset(strTmp, L'\0', _SIZE_);
 	}
 }
@@ -50,6 +51,18 @@ DWORD SearchAllFileOnSignature::File_Size(LPWSTR full_fale_name)
 		return NULL;
 	CloseHandle(hFile);
 	return dwSize;
+}
+
+bool dirExists(const std::wstring& dirName_in)
+{
+	DWORD ftyp = GetFileAttributesW(dirName_in.c_str());
+	if (ftyp == INVALID_FILE_ATTRIBUTES)
+		return false;  //something is wrong with your path!
+
+	if (ftyp & FILE_ATTRIBUTE_DIRECTORY)
+		return true;   // this is a directory!
+
+	return true;    // this is not a directory!
 }
 
 BOOL SearchAllFileOnSignature::Search_Signature(LPWSTR full_fale_name, BYTE* VIRUS_SIGNATURE)
@@ -74,11 +87,13 @@ BOOL SearchAllFileOnSignature::Search_Signature(LPWSTR full_fale_name, BYTE* VIR
 
 	BYTE* found = new BYTE[strlen((char*)VIRUS_SIGNATURE)]{};
 	INT temp = 0;
-	if (strlen((char*)VIRUS_SIGNATURE) > 0)
+	if (strlen((char*)VIRUS_SIGNATURE) > 0 && (GetFileAttributesW(full_fale_name) != INVALID_FILE_ATTRIBUTES))
 	{
 		for (INT i = 0; i < SIZE_FILE; i++)
 		{
-			if ((pBuffer[i] != VIRUS_SIGNATURE[0]))
+			if (pBuffer[i] == NULL)
+				break;
+			if (pBuffer[i] != VIRUS_SIGNATURE[0])
 				continue;
 			for (INT k = 0; k < strlen((char*)VIRUS_SIGNATURE); k++)
 			{
@@ -90,6 +105,7 @@ BOOL SearchAllFileOnSignature::Search_Signature(LPWSTR full_fale_name, BYTE* VIR
 						Free();
 						CloseHandle(hMap);
 						temp = i;
+						delete[] found;
 						return true;
 					}
 					found[k] = pBuffer[i + k];
@@ -125,7 +141,7 @@ std::vector<LPWSTR> SearchAllFileOnSignature::WriteDriver(double& indexFile, BYT
 					wcscat_s(strTmp, _SIZE_, L"\\");
 
 				wcscat_s(strTmp, _SIZE_, wdf.cFileName);
-				LPWSTR strTmp_ = (LPWSTR)calloc(wcslen(strTmp) + 1, sizeof(WCHAR));
+				LPWSTR strTmp_ = (LPWSTR)malloc((wcslen(strTmp) + 1) * sizeof(WCHAR));
 				wcscpy_s(strTmp_, wcslen(strTmp) + 1, strTmp);
 				if (std::wstring(strTmp_).substr(std::wstring(strTmp_).rfind('\\') + 1) != L"Recovery")
 					path_vec.push_back(strTmp_);
@@ -137,7 +153,7 @@ std::vector<LPWSTR> SearchAllFileOnSignature::WriteDriver(double& indexFile, BYT
 					wcscat_s(strTmp, _SIZE_, L"\\");
 
 				wcscat_s(strTmp, _SIZE_, wdf.cFileName);
-				LPWSTR strTmp_ = (LPWSTR)calloc(wcslen(strTmp) + 1, sizeof(WCHAR));
+				LPWSTR strTmp_ = (LPWSTR)malloc((wcslen(strTmp) + 1) * sizeof(WCHAR));
 				wcscpy_s(strTmp_, wcslen(strTmp) + 1, strTmp);
 				if (_exten(strTmp_, L"exe", L'.') || _exten(strTmp_, L"txt", L'.') || _exten(strTmp_, L"dll", L'.'))
 				{

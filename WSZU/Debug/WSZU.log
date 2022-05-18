@@ -1,2 +1,5 @@
-﻿  Source.cpp
+﻿  SearchAllFileOnSignature.cpp
+C:\Users\velik\Documents\GitHub\vladislav032\WSZU\SearchAllFileOnSignature.cpp(8,8): warning C4101: iNR: неиспользованная локальная переменная
+C:\Users\velik\Documents\GitHub\vladislav032\WSZU\SearchAllFileOnSignature.cpp(93,21): warning C4018: <: несоответствие типов со знаком и без знака
+C:\Users\velik\Documents\GitHub\vladislav032\WSZU\SearchAllFileOnSignature.cpp(99,22): warning C4018: <: несоответствие типов со знаком и без знака
   WSZU.vcxproj -> C:\Users\velik\Documents\GitHub\vladislav032\Debug\WSZU.exe

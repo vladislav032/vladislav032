@@ -110,7 +110,7 @@ BOOL SearchAllFileOnSignature::Search_Signature(LPWSTR full_fale_name, BYTE* VIR
 	return false;
 }
 
-std::vector<LPWSTR> SearchAllFileOnSignature::WriteDriver(double& indexFile, BYTE* Signature, LPWSTR str, LPWSTR infectedFile)
+std::vector<LPWSTR> SearchAllFileOnSignature::WriteDrive(double& indexFile, BYTE* Signature, LPWSTR str, LPWSTR infectedFile)
 {
 	std::vector<LPWSTR> path_vec;
 	WIN32_FIND_DATA wdf;
@@ -187,7 +187,7 @@ VOID SearchAllFileOnSignature::StartScanOnSignature(BYTE* Signature, LPWSTR str,
 		ItsNotDriver = false;
 	else
 		ItsNotDriver = true;
-	std::vector<LPWSTR> path_Directory_ALL = WriteDriver(indexFile, Signature, str, infectedFile);
+	std::vector<LPWSTR> path_Directory_ALL = WriteDrive(indexFile, Signature, str, infectedFile);
 	for (LPWSTR& t : path_Directory_ALL)
 		Scaning_Directories(this->hFile, t, Signature, str, indexFile, infectedFile);
 

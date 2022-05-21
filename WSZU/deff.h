@@ -35,7 +35,7 @@ HWND hSignatureEdit;
 HWND hPathSearch = nullptr;
 bool flag = false;
 HWND hButtonScanStart = nullptr;
-HWND hListBoxWriteDriver = nullptr;
+HWND hListBoxWriteDrive = nullptr;
 HWND hInfectedFilesListBox = nullptr;
 HWND hButtonStopSearch = nullptr;
 HWND hButtonDiscriptors = nullptr;

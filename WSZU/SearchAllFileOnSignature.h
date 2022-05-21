@@ -18,7 +18,7 @@ private:
 	VOID Scaning_Directories(HANDLE, LPWSTR, BYTE*, LPWSTR, double& procent, LPWSTR infectedFile);
 	DWORD File_Size(LPWSTR);
 	BOOL Search_Signature(LPWSTR, BYTE*);
-	std::vector<LPWSTR> WriteDriver(double& procent, BYTE* Signature, LPWSTR str, LPWSTR infectedFile);
+	std::vector<LPWSTR> WriteDrive(double& procent, BYTE* Signature, LPWSTR str, LPWSTR infectedFile);
 	BOOL _exten(LPWSTR, LPCWSTR, WCHAR const);
 	//std::string hasha(LPWSTR);
 public:

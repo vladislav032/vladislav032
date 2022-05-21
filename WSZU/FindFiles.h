@@ -1,9 +1,11 @@
 #ifndef H_FindFiles
 #define H_FindFiles
 
+#define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
 #include <ios>
 #include <vector>
+
 class FindFiles
 { //Рекурсивный поиск файлов.
 protected:

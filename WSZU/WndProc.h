@@ -114,11 +114,11 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 			if (HIWORD(wParam) == LBN_DBLCLK)
 			{
 				int uSelectedItem, nSize;
-				uSelectedItem = (int)SendMessage(hListBoxWriteDriver,
+				uSelectedItem = (int)SendMessage(hListBoxWriteDrive,
 					LB_GETCURSEL, 0, 0L);
 
 				if (uSelectedItem != LB_ERR)
-					SendMessage(hListBoxWriteDriver, LB_GETTEXT,
+					SendMessage(hListBoxWriteDrive, LB_GETTEXT,
 						uSelectedItem, (LPARAM)Buffer);
 			}
 		}
@@ -132,18 +132,18 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 		hButtonScanStart = CreateWindow(L"Button", L"Сканировать", WS_CHILD | WS_VISIBLE | WS_BORDER, 550, 40, 100, 50, hwnd, (HMENU)ID_hButtonScanStart, hInst, 0);
 		hButtonStopSearch = CreateWindow(L"Button", L"Остановить", WS_CHILD | WS_VISIBLE | WS_BORDER, 550, 100, 100, 50, hwnd, (HMENU)ID_hButtonStopSearch, hInst, 0);
 		hButtonDeleteInfectedFile = CreateWindow(L"Button", L"Удалить файлы", WS_CHILD | WS_VISIBLE | WS_BORDER, 490, 230, 160, 40, hwnd, (HMENU)ID_hButtonDeleteInfectedFile, hInst, 0);
-		hListBoxWriteDriver = CreateWindow(L"listBox", NULL, WS_CHILD | WS_VISIBLE | LBS_STANDARD | LBS_WANTKEYBOARDINPUT, 40, 40, 500, 80, hwnd, (HMENU)ID_hListBoxWriteDriver, hInst, 0);
+		hListBoxWriteDrive = CreateWindow(L"listBox", NULL, WS_CHILD | WS_VISIBLE | LBS_STANDARD | LBS_WANTKEYBOARDINPUT, 40, 40, 500, 80, hwnd, (HMENU)ID_hListBoxWriteDriver, hInst, 0);
 		hInfectedFilesListBox = CreateWindow(L"listBox", NULL, WS_CHILD | WS_VISIBLE | LBS_STANDARD | LBS_WANTKEYBOARDINPUT | WS_TABSTOP | WS_HSCROLL | LBS_NOINTEGRALHEIGHT, 40, 130, 500, 90, hwnd, (HMENU)ID_hInfectedFilesListBox, hInst, 0);
 
 		indexDrive = GetLogicalDriveStringsW(sizeof(buf), buf);
 		prevIndexDrive = indexDrive;
-		SendMessage(hListBoxWriteDriver, WM_SETREDRAW, FALSE, 0L);
+		SendMessage(hListBoxWriteDrive, WM_SETREDRAW, FALSE, 0L);
 		for (wchar_t* s = buf; *s; s += wcslen(s) + 1)
 		{
-			SendMessage(hListBoxWriteDriver, LB_ADDSTRING, 0, (LPARAM)s);
+			SendMessage(hListBoxWriteDrive, LB_ADDSTRING, 0, (LPARAM)s);
 		}
-		SendMessage(hListBoxWriteDriver, LB_GETTEXT, 0, (LPARAM)Buffer);
-		SendMessage(hListBoxWriteDriver, WM_SETREDRAW, TRUE, 0L);
+		SendMessage(hListBoxWriteDrive, LB_GETTEXT, 0, (LPARAM)Buffer);
+		SendMessage(hListBoxWriteDrive, WM_SETREDRAW, TRUE, 0L);
 		SendMessage(GetDlgItem(hwnd, ID_hInfectedFilesListBox), LB_SETHORIZONTALEXTENT, 1000, 0);
 
 		li.QuadPart = 0;
@@ -187,19 +187,19 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 		{
 			prevIndexDrive = indexDrive;
 			MessageBox(hwnd, L"Произошло изменение, диск или устройство было добавлено или изьято!", L"Предупреждение", MB_OK);
-			SendMessage(hListBoxWriteDriver, LB_RESETCONTENT, 0, 0);
-			SendMessage(hListBoxWriteDriver, WM_SETREDRAW, FALSE, 0L);
+			SendMessage(hListBoxWriteDrive, LB_RESETCONTENT, 0, 0);
+			SendMessage(hListBoxWriteDrive, WM_SETREDRAW, FALSE, 0L);
 			for (wchar_t* s = buf; *s; s += wcslen(s) + 1)
 			{
-				SendMessage(hListBoxWriteDriver, LB_ADDSTRING, 0, (LPARAM)s);
+				SendMessage(hListBoxWriteDrive, LB_ADDSTRING, 0, (LPARAM)s);
 				wcscpy_s(Buffer, _SIZE_, s);
 			}
-			SendMessage(hListBoxWriteDriver, WM_SETREDRAW, TRUE, 0L);
+			SendMessage(hListBoxWriteDrive, WM_SETREDRAW, TRUE, 0L);
 			Change_Drives = true;
 		}
 		break;
 	case WM_SETFOCUS:
-		SetFocus(hListBoxWriteDriver);
+		SetFocus(hListBoxWriteDrive);
 	case WM_DESTROY:
 		break;
 	case WM_CLOSE:

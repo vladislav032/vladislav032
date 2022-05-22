@@ -1,14 +1,10 @@
-﻿  SearchAllFileOnSignature.cpp
-C:\Users\velik\Documents\GitHub\vladislav032\WSZU\SearchAllFileOnSignature.cpp(8,8): warning C4101: iNR: неиспользованная локальная переменная
-C:\Users\velik\Documents\GitHub\vladislav032\WSZU\SearchAllFileOnSignature.cpp(80,21): warning C4018: <: несоответствие типов со знаком и без знака
-C:\Users\velik\Documents\GitHub\vladislav032\WSZU\SearchAllFileOnSignature.cpp(86,22): warning C4018: <: несоответствие типов со знаком и без знака
-  Window.cpp
-C:\Users\velik\Documents\GitHub\vladislav032\WSZU\WndProc.h(169,9): warning C4244: аргумент: преобразование "double" в "int", возможна потеря данных
-C:\Users\velik\Documents\GitHub\vladislav032\WSZU\WndProc.h(116,24): warning C4101: nSize: неиспользованная локальная переменная
+﻿  Window.cpp
+C:\Users\velik\Documents\GitHub\vladislav032\WSZU\WndProc.h(199,9): warning C4244: аргумент: преобразование "double" в "int", возможна потеря данных
+C:\Users\velik\Documents\GitHub\vladislav032\WSZU\WndProc.h(146,24): warning C4101: nSize: неиспользованная локальная переменная
 C:\Users\velik\Documents\GitHub\vladislav032\WSZU\Window.cpp(16,36): warning C4302: приведение типов: усечение из "LPWSTR" к "WORD"
   Создание кода
-  6 of 358 functions ( 1.7%) were compiled, the rest were copied from previous compilation.
-    1 functions were new in current compilation
-    2 functions had inline decision re-evaluated but remain unchanged
+  3 of 294 functions ( 1.0%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    1 functions had inline decision re-evaluated but remain unchanged
   Создание кода завершено
   WSZU.vcxproj -> C:\Users\velik\Documents\GitHub\vladislav032\Release\WSZU.exe

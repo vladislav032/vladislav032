@@ -2,11 +2,6 @@
 
 #include "deff.h"
 
-void threadFunction(wchar_t* str, double& iFile, SearchAllFileOnSignature& safos, wchar_t* InfectedFile)
-{
-	safos.StartScanOnSignature(VIRUS_SIGNATURE, str, iFile, InfectedFile);
-}
-
 static int CALLBACK	BrowseCallbackProc(HWND hWnd, UINT uMsg, LPARAM lParam, LPARAM lpData)
 {
 	switch (uMsg) {
@@ -69,9 +64,36 @@ BOOL GetFolder(LPCTSTR szRoot, HWND hWndOwner)
 	}
 }
 
+struct PDATA_
+{
+	wchar_t* str = NULL;
+	double* iFile = NULL;
+	SearchAllFileOnSignature* safos;
+	wchar_t* InfectedFile = NULL;
+};
+
+DWORD WINAPI ThreadFuction(LPVOID lParam)
+{
+	HANDLE hStdout;
+	PDATA_* pData;
+
+	hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
+	if (hStdout ==  INVALID_HANDLE_VALUE)
+		return -2;
+
+	pData = (PDATA_*)(lParam);
+
+	pData->safos->StartScanOnSignature(VIRUS_SIGNATURE, pData->str, *pData->iFile, pData->InfectedFile);
+
+	return 0;
+}
+
 LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
+	static PDATA_ pData;
+	static DWORD dwThreadId;
 	HINSTANCE hInst = (HINSTANCE)GetWindowLongPtr(hwnd, GWLP_HINSTANCE);
+
 	switch (message)
 	{
 	case WM_COMMAND:
@@ -86,14 +108,21 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 				SendMessage(hInfectedFilesListBox, LB_RESETCONTENT, 0, 0);
 				Pahts.clear();
 				flag = true;
-				thr = std::thread(threadFunction, std::ref(STR), std::ref(indexFile), std::ref(safos), std::ref(InfectedFile));
+				pData.str = STR;
+				pData.iFile = &indexFile;
+				pData.safos = &safos;
+				pData.InfectedFile = InfectedFile;
+
+				Thread = CreateThread(NULL, 0, ThreadFuction, &pData, 0, &dwThreadId);
+				if (Thread == NULL)
+					printf("ERORR CREATE THREAD");
 			}
 		}
 		if ((LOWORD(wParam) == ID_hButtonStopSearch && flag))
 		{
 			flag = false;
-			TerminateThread(thr.native_handle(), NULL);
-			thr.detach();
+			TerminateThread(Thread, dwThreadId);
+			CloseHandle(Thread);
 			safos.Free();
 		}
 		if (LOWORD(wParam) == ID_hButtonDiscriptors)
@@ -205,8 +234,8 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 	case WM_CLOSE:
 		if (flag)
 		{
-			TerminateThread(thr.native_handle(), NULL);
-			thr.detach();
+			//TerminateThread(thr.native_handle(), NULL);
+			//thr.detach();
 		}
 		safos.Free();
 		exit(NULL);

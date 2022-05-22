@@ -1,7 +1,6 @@
 #pragma once
 
 #include "SearchAllFileOnSignature.h"
-#include <thread>
 #include <shlobj.h>
 
 #define ID_hButtonScanStart 1			//ID кнопки старт
@@ -22,7 +21,7 @@ TCHAR szPath[_SIZE_];
 std::vector<wchar_t*> Pahts{ 0 };
 wchar_t Buff[128]{};
 
-std::thread thr;
+HANDLE Thread;
 HDC hdc;
 PAINTSTRUCT ps;
 DWORD indexDrive, prevIndexDrive;

@@ -93,7 +93,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 	static PDATA_ pData;
 	static DWORD dwThreadId;
 	HINSTANCE hInst = (HINSTANCE)GetWindowLongPtr(hwnd, GWLP_HINSTANCE);
-
+	
 	switch (message)
 	{
 	case WM_COMMAND:

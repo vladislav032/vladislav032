@@ -12,6 +12,10 @@
 
 #define DEST_PATH L"log.txt"
 
+#pragma comment(linker,"\"/manifestdependency:type='win32' \
+name='Microsoft.Windows.Common-Controls' version='6.0.0.0' \
+processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'\"")
+
 BYTE* VIRUS_SIGNATURE = new BYTE[_SIZE_SIGNATURE_VIRUS]{};
 LPWSTR Buffer = (LPWSTR)malloc((_SIZE_ + 1) * sizeof(LPWSTR));
 wchar_t STR[_SIZE_] = L"\0";

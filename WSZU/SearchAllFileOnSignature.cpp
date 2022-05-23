@@ -20,7 +20,7 @@ VOID SearchAllFileOnSignature::Scaning_Directories(HANDLE hFile, LPWSTR Path, BY
 		wcscat_s(strTmp, _SIZE_, f.Info.cFileName);
 		if (_exten(strTmp, L"exe", L'.') || _exten(strTmp, L"dll", L'.') || _exten(strTmp, L"txt", L'.'))
 		{
-			//if (Search_Signature(strTmp, Signature))
+			if (Search_Signature(strTmp, Signature))
 			{
 				wcscat_s(strTmp, _SIZE_, L"\r\n");
 				WriteFile(this->hFile, strTmp, wcslen(strTmp) * sizeof(WCHAR), &iNW, &olf);

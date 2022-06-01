@@ -1,5 +1,7 @@
-﻿  SearchAllFileOnSignature.cpp
-C:\Users\velik\Documents\GitHub\vladislav032\WSZU\SearchAllFileOnSignature.cpp(8,8): warning C4101: iNR: неиспользованная локальная переменная
-C:\Users\velik\Documents\GitHub\vladislav032\WSZU\SearchAllFileOnSignature.cpp(93,21): warning C4018: <: несоответствие типов со знаком и без знака
-C:\Users\velik\Documents\GitHub\vladislav032\WSZU\SearchAllFileOnSignature.cpp(99,22): warning C4018: <: несоответствие типов со знаком и без знака
+﻿  Window.cpp
+C:\Users\velik\Documents\GitHub\vladislav032\WSZU\WndProc.h(200,9): warning C4244: аргумент: преобразование "double" в "int", возможна потеря данных
+C:\Users\velik\Documents\GitHub\vladislav032\WSZU\WndProc.h(147,24): warning C4101: nSize: неиспользованная локальная переменная
+C:\Users\velik\Documents\GitHub\vladislav032\WSZU\Window.cpp(16,36): warning C4302: приведение типов: усечение из "LPWSTR" к "WORD"
+C:\Users\velik\Documents\GitHub\vladislav032\WSZU\WndProc.h(65): warning C4715: GetFolder: значение возвращается не при всех путях выполнения
+FindFiles.obj : warning LNK4075: не учитывается "/EDITANDCONTINUE" из-за спецификации "/INCREMENTAL:NO"
   WSZU.vcxproj -> C:\Users\velik\Documents\GitHub\vladislav032\Debug\WSZU.exe

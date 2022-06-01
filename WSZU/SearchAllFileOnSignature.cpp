@@ -79,15 +79,16 @@ BOOL SearchAllFileOnSignature::Search_Signature(LPWSTR full_fale_name, BYTE* VIR
 	{
 		for (INT i = 0; i < SIZE_FILE; i++)
 		{
-			if (pBuffer[i] == NULL)
-				break;
+			/*if ((GetFileAttributesW(full_fale_name) == INVALID_FILE_ATTRIBUTES))
+				return false;*/
+
 			if (pBuffer[i] != VIRUS_SIGNATURE[0])
 				continue;
 			for (INT k = 0; k < strlen((char*)VIRUS_SIGNATURE); k++)
 			{
 				if (pBuffer[i + k] == VIRUS_SIGNATURE[k])
 				{
-					if (k == (strlen((char*)VIRUS_SIGNATURE) - 1))
+					if (k == strlen((char*)VIRUS_SIGNATURE) - 1)
 					{
 						CloseHandle(hFile);
 						Free();

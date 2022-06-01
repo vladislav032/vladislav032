@@ -92,6 +92,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	static PDATA_ pData;
 	static DWORD dwThreadId;
+
 	HINSTANCE hInst = (HINSTANCE)GetWindowLongPtr(hwnd, GWLP_HINSTANCE);
 	
 	switch (message)
@@ -121,9 +122,10 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 		if ((LOWORD(wParam) == ID_hButtonStopSearch && flag))
 		{
 			flag = false;
+			DWORD s;
+			//ExitThread(dwThreadId);
 			TerminateThread(Thread, dwThreadId);
 			CloseHandle(Thread);
-			safos.Free();
 		}
 		if (LOWORD(wParam) == ID_hButtonDiscriptors)
 		{
@@ -174,10 +176,10 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 		SendMessage(hListBoxWriteDrive, LB_GETTEXT, 0, (LPARAM)Buffer);
 		SendMessage(hListBoxWriteDrive, WM_SETREDRAW, TRUE, 0L);
 		SendMessage(GetDlgItem(hwnd, ID_hInfectedFilesListBox), LB_SETHORIZONTALEXTENT, 1000, 0);
-
 		li.QuadPart = 0;
 		olf.Offset = li.LowPart;
 		olf.OffsetHigh = li.HighPart;
+		//WriteFile(hSignatureFiles, a, sizeof(a), NULL, NULL);
 		ReadFile(hSignatureFiles, (BYTE*)VIRUS_SIGNATURE, _SIZE_SIGNATURE_VIRUS, &iNumberRead, &olf);
 		olf.Offset += iNumberRead;
 
@@ -216,6 +218,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 		{
 			prevIndexDrive = indexDrive;
 			MessageBox(hwnd, L"Произошло изменение, диск или устройство было добавлено или изьято!", L"Предупреждение", MB_OK);
+			SendMessage(hInfectedFilesListBox, LB_RESETCONTENT, 0, 0);
 			SendMessage(hListBoxWriteDrive, LB_RESETCONTENT, 0, 0);
 			SendMessage(hListBoxWriteDrive, WM_SETREDRAW, FALSE, 0L);
 			for (wchar_t* s = buf; *s; s += wcslen(s) + 1)
@@ -229,14 +232,8 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 		break;
 	case WM_SETFOCUS:
 		SetFocus(hListBoxWriteDrive);
-	case WM_DESTROY:
 		break;
 	case WM_CLOSE:
-		if (flag)
-		{
-			//TerminateThread(thr.native_handle(), NULL);
-			//thr.detach();
-		}
 		safos.Free();
 		exit(NULL);
 		break;
